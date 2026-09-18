@@ -43,3 +43,13 @@ export type Customer = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Sale = {
+  id: string;
+  salePrice: string; // Decimal -> string over JSON, same as Vehicle.price
+  saleDate: string;
+  notes: string | null;
+  createdAt: string;
+  vehicle: { make: string; model: string; year: number; vin: string };
+  customer: { name: string; email: string | null; phone: string | null };
+};
