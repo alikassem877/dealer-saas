@@ -30,3 +30,16 @@ export type Vehicle = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type CustomerStatus = "LEAD" | "CUSTOMER";
+
+export type Customer = {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  notes: string | null;
+  status: CustomerStatus;
+  createdAt: string;
+  updatedAt: string;
+};
