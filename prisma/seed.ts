@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { hashPassword } from "../src/lib/auth/password";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
@@ -20,6 +21,18 @@ async function main() {
   await prisma.customer.deleteMany();
   await prisma.user.deleteMany();
   await prisma.dealership.deleteMany();
+
+    const platformOwnerPassword = await hashPassword("PlatformOwner123!");
+  await prisma.user.create({
+    data: {
+      name: "Platform Owner",
+      email: "owner@platform.com",
+      passwordHash: platformOwnerPassword,
+      role: "PLATFORM_OWNER",
+      dealershipId: null,
+    },
+  });
+  console.log("✅ Seeded Platform Owner: owner@platform.com / PlatformOwner123!");
 
   // Two dealerships — so we can later PROVE tenant isolation works
   const alpha = await prisma.dealership.create({
