@@ -4,26 +4,20 @@ import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
 export default function HomePage() {
   return (
     <RedirectIfAuthenticated>
-      <main
-        style={{
-          maxWidth: 600,
-          margin: "6rem auto",
-          padding: "0 1rem",
-          textAlign: "center",
-        }}
-      >
-        <h1>Dealer SaaS</h1>
-        <p style={{ color: "#666", marginBottom: "2rem" }}>
-          Inventory, leads, and sales management for automotive dealerships.
-        </p>
-
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-          <Link href="/login">
-            <button style={{ padding: "0.6rem 1.2rem" }}>Log in</button>
-          </Link>
-          <Link href="/register">
-            <button style={{ padding: "0.6rem 1.2rem" }}>Register your dealership</button>
-          </Link>
+      <main className="flex min-h-screen items-center justify-center px-4">
+        <div className="max-w-md text-center">
+          <h1 className="text-3xl">Dealer SaaS</h1>
+          <p className="mt-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            Inventory, leads, and sales in one place for your dealership.
+          </p>
+          <div className="mt-8 flex justify-center gap-3">
+            <Link href="/login" className="btn btn-secondary">
+              Log in
+            </Link>
+            <Link href="/register" className="btn btn-primary">
+              Register your dealership
+            </Link>
+          </div>
         </div>
       </main>
     </RedirectIfAuthenticated>

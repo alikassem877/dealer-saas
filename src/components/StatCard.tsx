@@ -8,17 +8,16 @@ export function StatCard({
   hint?: string;
 }) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: 8,
-        padding: "1rem 1.25rem",
-        minWidth: 160,
-      }}
-    >
-      <div style={{ fontSize: "0.85rem", color: "#666" }}>{label}</div>
-      <div style={{ fontSize: "1.8rem", fontWeight: 600 }}>{value}</div>
-      {hint && <div style={{ fontSize: "0.75rem", color: "#999" }}>{hint}</div>}
+    <div className="card">
+      <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+        {label}
+      </div>
+      <div className="font-display mt-1 text-2xl">{value}</div>
+      {hint && (
+        <div className="mt-1 text-xs" style={{ color: "var(--color-text-muted)" }}>
+          {hint}
+        </div>
+      )}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiFetch, ApiClientError } from "@/lib/api/client";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -44,75 +45,85 @@ export default function RegisterPage() {
     }
   }
 
-  return (
-    <main style={{ maxWidth: 400, margin: "4rem auto", padding: "0 1rem" }}>
-      <h1>Register your dealership</h1>
+   return (
+    <RedirectIfAuthenticated>
+      <main className="flex min-h-screen items-center justify-center px-4 py-10">
+        <div className="card w-full max-w-sm">
+          <h1 className="text-2xl">Register your dealership</h1>
+          <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            Set up your account in a minute.
+          </p>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.75rem" }}>
-        <label>
-          Dealership name
-          <input
-            value={form.dealershipName}
-            onChange={updateField("dealershipName")}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
+          <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+            <div>
+              <label className="field-label">Dealership name</label>
+              <input
+                className="field-input"
+                value={form.dealershipName}
+                onChange={updateField("dealershipName")}
+                required
+              />
+            </div>
+            <div>
+              <label className="field-label">Dealership email</label>
+              <input
+                className="field-input"
+                type="email"
+                value={form.dealershipEmail}
+                onChange={updateField("dealershipEmail")}
+                required
+              />
+            </div>
+            <div>
+              <label className="field-label">Your name</label>
+              <input
+                className="field-input"
+                value={form.ownerName}
+                onChange={updateField("ownerName")}
+                required
+              />
+            </div>
+            <div>
+              <label className="field-label">Your email</label>
+              <input
+                className="field-input"
+                type="email"
+                value={form.ownerEmail}
+                onChange={updateField("ownerEmail")}
+                required
+              />
+            </div>
+            <div>
+              <label className="field-label">Password</label>
+              <input
+                className="field-input"
+                type="password"
+                value={form.password}
+                onChange={updateField("password")}
+                required
+                minLength={8}
+              />
+            </div>
 
-        <label>
-          Dealership email
-          <input
-            type="email"
-            value={form.dealershipEmail}
-            onChange={updateField("dealershipEmail")}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
+            {error && (
+              <p className="text-sm" style={{ color: "var(--color-danger)" }}>
+                {error}
+              </p>
+            )}
 
-        <label>
-          Your name
-          <input
-            value={form.ownerName}
-            onChange={updateField("ownerName")}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
+            <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+              {isSubmitting ? "Creating account…" : "Register"}
+            </button>
+          </form>
 
-        <label>
-          Your email
-          <input
-            type="email"
-            value={form.ownerEmail}
-            onChange={updateField("ownerEmail")}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
-
-        <label>
-          Password
-          <input
-            type="password"
-            value={form.password}
-            onChange={updateField("password")}
-            required
-            minLength={8}
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
-
-        {error && <p style={{ color: "crimson" }}>{error}</p>}
-
-        <button type="submit" disabled={isSubmitting} style={{ padding: "0.6rem" }}>
-          {isSubmitting ? "Creating account..." : "Register"}
-        </button>
-      </form>
-
-      <p style={{ marginTop: "1rem" }}>
-        Already have an account? <Link href="/login">Log in</Link>
-      </p>
-    </main>
+          <p className="mt-5 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            Already have an account?{" "}
+            <Link href="/login" style={{ color: "var(--color-primary)" }}>
+              Log in
+            </Link>
+          </p>
+        </div>
+      </main>
+    </RedirectIfAuthenticated>
   );
 }

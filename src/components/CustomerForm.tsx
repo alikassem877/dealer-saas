@@ -49,64 +49,58 @@ export function CustomerForm({
     onSubmit(values);
   }
 
-  return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "0.75rem",
-        border: "1px solid #ddd",
-        borderRadius: 8,
-        padding: "1rem",
-        marginBottom: "1.5rem",
-      }}
-    >
-      <label>
-        Name
-        <input value={values.name} onChange={updateField("name")} required style={inputStyle} />
-      </label>
-      <label>
-        Status
-        <select value={values.status} onChange={updateField("status")} style={inputStyle}>
-          <option value="LEAD">Lead</option>
-          <option value="CUSTOMER">Customer</option>
-        </select>
-      </label>
-      <label>
-        Email
-        <input type="email" value={values.email} onChange={updateField("email")} style={inputStyle} />
-      </label>
-      <label>
-        Phone
-        <input value={values.phone} onChange={updateField("phone")} style={inputStyle} />
-      </label>
-      <label style={{ gridColumn: "1 / -1" }}>
-        Notes
-        <textarea
-          value={values.notes}
-          onChange={updateField("notes")}
-          rows={3}
-          style={{ ...inputStyle, resize: "vertical" }}
-        />
-      </label>
+    return (
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="field-label">Name</label>
+          <input className="field-input" value={values.name} onChange={updateField("name")} required />
+        </div>
+        <div>
+          <label className="field-label">Status</label>
+          <select className="field-input" value={values.status} onChange={updateField("status")}>
+            <option value="LEAD">Lead</option>
+            <option value="CUSTOMER">Customer</option>
+          </select>
+        </div>
+        <div>
+          <label className="field-label">Email</label>
+          <input
+            className="field-input"
+            type="email"
+            value={values.email}
+            onChange={updateField("email")}
+          />
+        </div>
+        <div>
+          <label className="field-label">Phone</label>
+          <input className="field-input" value={values.phone} onChange={updateField("phone")} />
+        </div>
+        <div className="col-span-2">
+          <label className="field-label">Notes</label>
+          <textarea
+            className="field-input"
+            value={values.notes}
+            onChange={updateField("notes")}
+            rows={3}
+          />
+        </div>
+      </div>
 
-      <div style={{ gridColumn: "1 / -1" }}>
-        {submitError && <p style={{ color: "crimson" }}>{submitError}</p>}
-        <button type="submit" disabled={isSubmitting} style={{ marginRight: "0.5rem" }}>
-          {isSubmitting ? "Saving..." : initialCustomer ? "Save changes" : "Add customer"}
+      {submitError && (
+        <p className="mt-3 text-sm" style={{ color: "var(--color-danger)" }}>
+          {submitError}
+        </p>
+      )}
+
+      <div className="mt-5 flex gap-3">
+        <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+          {isSubmitting ? "Saving…" : initialCustomer ? "Save changes" : "Add customer"}
         </button>
-        <button type="button" onClick={onCancel}>
+        <button type="button" onClick={onCancel} className="btn btn-secondary">
           Cancel
         </button>
       </div>
     </form>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "0.4rem",
-  display: "block",
-  marginTop: "0.2rem",
-};

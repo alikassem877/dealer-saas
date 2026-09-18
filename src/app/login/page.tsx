@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiFetch, ApiClientError } from "@/lib/api/client";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -38,43 +39,58 @@ export default function LoginPage() {
     }
   }
 
-  return (
-    <main style={{ maxWidth: 400, margin: "4rem auto", padding: "0 1rem" }}>
-      <h1>Log in</h1>
+    return (
+    <RedirectIfAuthenticated>
+      <main className="flex min-h-screen items-center justify-center px-4">
+        <div className="card w-full max-w-sm">
+          <h1 className="text-2xl">Log in</h1>
+          <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            Welcome back.
+          </p>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.75rem" }}>
-        <label>
-          Email
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
+          <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+            <div>
+              <label className="field-label">Email</label>
+              <input
+                className="field-input"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
+            <div>
+              <label className="field-label">Password</label>
+              <input
+                className="field-input"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-        {error && <p style={{ color: "crimson" }}>{error}</p>}
+            {error && (
+              <p className="text-sm" style={{ color: "var(--color-danger)" }}>
+                {error}
+              </p>
+            )}
 
-        <button type="submit" disabled={isSubmitting} style={{ padding: "0.6rem" }}>
-          {isSubmitting ? "Logging in..." : "Log in"}
-        </button>
-      </form>
+            <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+              {isSubmitting ? "Logging in…" : "Log in"}
+            </button>
+          </form>
 
-      <p style={{ marginTop: "1rem" }}>
-        No account? <Link href="/register">Register your dealership</Link>
-      </p>
-    </main>
+          <p className="mt-5 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            No account?{" "}
+            <Link href="/register" style={{ color: "var(--color-primary)" }}>
+              Register your dealership
+            </Link>
+          </p>
+        </div>
+      </main>
+    </RedirectIfAuthenticated>
   );
+}
 }

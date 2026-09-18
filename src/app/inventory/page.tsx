@@ -2,17 +2,19 @@
 
 import { useState } from "react";
 import { RequireAuth } from "@/components/RequireAuth";
+import { AppShell } from "@/components/AppShell";
 import { useApiData } from "@/lib/api/useApiData";
 import { apiFetch, ApiClientError } from "@/lib/api/client";
 import { StatusBadge } from "@/components/StatusBadge";
 import { VehicleForm, type VehicleFormValues } from "@/components/VehicleForm";
 import type { Vehicle } from "@/lib/api/types";
-import Link from "next/link";
 
 export default function InventoryPage() {
   return (
     <RequireAuth allowedRoles={["DEALERSHIP_OWNER"]}>
-      <InventoryContent />
+      <AppShell>
+        <InventoryContent />
+      </AppShell>
     </RequireAuth>
   );
 }
@@ -22,9 +24,9 @@ function InventoryContent() {
     "/api/vehicles"
   );
 
-  const [mode, setMode] = useState<{ type: "closed" } | { type: "create" } | { type: "edit"; vehicle: Vehicle }>({
-    type: "closed",
-  });
+  const [mode, setMode] = useState<
+  { type: "closed" } | { type: "create" } | { type: "edit"; vehicle: Vehicle }
+>({ type: "closed" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [rowError, setRowError] = useState<string | null>(null);
@@ -45,10 +47,7 @@ function InventoryContent() {
     setIsSubmitting(true);
     setSubmitError(null);
     try {
-      await apiFetch("/api/vehicles", {
-        method: "POST",
-        body: JSON.stringify(toPayload(values)),
-      });
+      await apiFetch("/api/vehicles", { method: "POST", body: JSON.stringify(toPayload(values)) });
       setMode({ type: "closed" });
       await refetch();
     } catch (err) {
@@ -78,7 +77,6 @@ function InventoryContent() {
   async function handleDelete(vehicle: Vehicle) {
     setRowError(null);
     if (!confirm(`Delete ${vehicle.year} ${vehicle.make} ${vehicle.model}?`)) return;
-
     try {
       await apiFetch(`/api/vehicles/${vehicle.id}`, { method: "DELETE" });
       await refetch();
@@ -88,78 +86,97 @@ function InventoryContent() {
   }
 
   return (
-    <main style={{ padding: "2rem", maxWidth: 1000, margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Inventory</h1>
-        <Link href="/dashboard">← Dashboard</Link>
+    <div>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl">Inventory</h1>
+        {mode.type === "closed" && (
+          <button className="btn btn-primary" onClick={() => setMode({ type: "create" })}>
+            Add vehicle
+          </button>
+        )}
       </div>
 
-      {mode.type === "closed" && (
-        <button onClick={() => setMode({ type: "create" })} style={{ margin: "1rem 0" }}>
-          + Add Vehicle
-        </button>
-      )}
-
       {mode.type === "create" && (
-        <VehicleForm
-          onSubmit={handleCreate}
-          onCancel={() => setMode({ type: "closed" })}
-          isSubmitting={isSubmitting}
-          submitError={submitError}
-        />
+        <div className="card mt-6">
+          <VehicleForm
+            onSubmit={handleCreate}
+            onCancel={() => setMode({ type: "closed" })}
+            isSubmitting={isSubmitting}
+            submitError={submitError}
+          />
+        </div>
       )}
 
       {mode.type === "edit" && (
-        <VehicleForm
-          initialVehicle={mode.vehicle}
-          onSubmit={(values) => handleUpdate(mode.vehicle.id, values)}
-          onCancel={() => setMode({ type: "closed" })}
-          isSubmitting={isSubmitting}
-          submitError={submitError}
-        />
+        <div className="card mt-6">
+          <VehicleForm
+            initialVehicle={mode.vehicle}
+            onSubmit={(values) => handleUpdate(mode.vehicle.id, values)}
+            onCancel={() => setMode({ type: "closed" })}
+            isSubmitting={isSubmitting}
+            submitError={submitError}
+          />
+        </div>
       )}
 
-      {isLoading && <p>Loading vehicles...</p>}
-      {error && <p style={{ color: "crimson" }}>{error}</p>}
-      {rowError && <p style={{ color: "crimson" }}>{rowError}</p>}
+      {isLoading && (
+        <p className="mt-6 text-sm" style={{ color: "var(--color-text-muted)" }}>
+          Loading vehicles…
+        </p>
+      )}
+      {error && (
+        <p className="mt-6 text-sm" style={{ color: "var(--color-danger)" }}>
+          {error}
+        </p>
+      )}
+      {rowError && (
+        <p className="mt-6 text-sm" style={{ color: "var(--color-danger)" }}>
+          {rowError}
+        </p>
+      )}
 
-      {data && data.vehicles.length === 0 && <p>No vehicles yet. Add your first one above.</p>}
+      {data && data.vehicles.length === 0 && (
+        <div className="empty-state mt-6">No vehicles yet. Add your first one above.</div>
+      )}
 
       {data && data.vehicles.length > 0 && (
-        <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "1rem" }}>
+        <table className="data-table mt-6">
           <thead>
-            <tr style={{ textAlign: "left", borderBottom: "2px solid #ddd" }}>
-              <th style={cellStyle}>Vehicle</th>
-              <th style={cellStyle}>VIN</th>
-              <th style={cellStyle}>Price</th>
-              <th style={cellStyle}>Mileage</th>
-              <th style={cellStyle}>Status</th>
-              <th style={cellStyle}></th>
+            <tr>
+              <th>Vehicle</th>
+              <th>VIN</th>
+              <th>Price</th>
+              <th>Mileage</th>
+              <th>Status</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {data.vehicles.map((vehicle) => (
-              <tr key={vehicle.id} style={{ borderBottom: "1px solid #eee" }}>
-                <td style={cellStyle}>
+              <tr key={vehicle.id}>
+                <td>
                   {vehicle.year} {vehicle.make} {vehicle.model}
                 </td>
-                <td style={cellStyle}>{vehicle.vin}</td>
-                <td style={cellStyle}>${Number(vehicle.price).toLocaleString()}</td>
-                <td style={cellStyle}>{vehicle.mileage.toLocaleString()} mi</td>
-                <td style={cellStyle}>
+                <td style={{ color: "var(--color-text-muted)" }}>{vehicle.vin}</td>
+                <td>${Number(vehicle.price).toLocaleString()}</td>
+                <td>{vehicle.mileage.toLocaleString()} mi</td>
+                <td>
                   <StatusBadge status={vehicle.status} />
                 </td>
-                <td style={cellStyle}>
+                <td>
                   {vehicle.status !== "SOLD" && (
-                    <>
+                    <div className="flex gap-3">
                       <button
+                        className="link-danger"
+                        style={{ color: "var(--color-primary)" }}
                         onClick={() => setMode({ type: "edit", vehicle })}
-                        style={{ marginRight: "0.5rem" }}
                       >
                         Edit
                       </button>
-                      <button onClick={() => handleDelete(vehicle)}>Delete</button>
-                    </>
+                      <button className="link-danger" onClick={() => handleDelete(vehicle)}>
+                        Delete
+                      </button>
+                    </div>
                   )}
                 </td>
               </tr>
@@ -167,8 +184,6 @@ function InventoryContent() {
           </tbody>
         </table>
       )}
-    </main>
+    </div>
   );
 }
-
-const cellStyle: React.CSSProperties = { padding: "0.6rem 0.5rem" };

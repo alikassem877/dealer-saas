@@ -137,10 +137,3 @@ export function SaleForm({
     </form>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "0.4rem",
-  display: "block",
-  marginTop: "0.2rem",
-};

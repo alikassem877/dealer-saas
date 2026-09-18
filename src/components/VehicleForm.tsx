@@ -53,88 +53,77 @@ export function VehicleForm({
     onSubmit(values);
   }
 
-  return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "0.75rem",
-        border: "1px solid #ddd",
-        borderRadius: 8,
-        padding: "1rem",
-        marginBottom: "1.5rem",
-      }}
-    >
-      <label>
-        Make
-        <input value={values.make} onChange={updateField("make")} required style={inputStyle} />
-      </label>
-      <label>
-        Model
-        <input value={values.model} onChange={updateField("model")} required style={inputStyle} />
-      </label>
-      <label>
-        Year
-        <input
-          type="number"
-          value={values.year}
-          onChange={updateField("year")}
-          required
-          style={inputStyle}
-        />
-      </label>
-      <label>
-        VIN
-        <input
-          value={values.vin}
-          onChange={updateField("vin")}
-          required
-          maxLength={17}
-          style={inputStyle}
-        />
-      </label>
-      <label>
-        Price ($)
-        <input
-          type="number"
-          step="0.01"
-          value={values.price}
-          onChange={updateField("price")}
-          required
-          style={inputStyle}
-        />
-      </label>
-      <label>
-        Mileage
-        <input
-          type="number"
-          value={values.mileage}
-          onChange={updateField("mileage")}
-          style={inputStyle}
-        />
-      </label>
-      <label>
-        Color
-        <input value={values.color} onChange={updateField("color")} style={inputStyle} />
-      </label>
+    return (
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="field-label">Make</label>
+          <input className="field-input" value={values.make} onChange={updateField("make")} required />
+        </div>
+        <div>
+          <label className="field-label">Model</label>
+          <input className="field-input" value={values.model} onChange={updateField("model")} required />
+        </div>
+        <div>
+          <label className="field-label">Year</label>
+          <input
+            className="field-input"
+            type="number"
+            value={values.year}
+            onChange={updateField("year")}
+            required
+          />
+        </div>
+        <div>
+          <label className="field-label">VIN</label>
+          <input
+            className="field-input"
+            value={values.vin}
+            onChange={updateField("vin")}
+            required
+            maxLength={17}
+          />
+        </div>
+        <div>
+          <label className="field-label">Price ($)</label>
+          <input
+            className="field-input"
+            type="number"
+            step="0.01"
+            value={values.price}
+            onChange={updateField("price")}
+            required
+          />
+        </div>
+        <div>
+          <label className="field-label">Mileage</label>
+          <input
+            className="field-input"
+            type="number"
+            value={values.mileage}
+            onChange={updateField("mileage")}
+          />
+        </div>
+        <div>
+          <label className="field-label">Color</label>
+          <input className="field-input" value={values.color} onChange={updateField("color")} />
+        </div>
+      </div>
 
-      <div style={{ gridColumn: "1 / -1" }}>
-        {submitError && <p style={{ color: "crimson" }}>{submitError}</p>}
-        <button type="submit" disabled={isSubmitting} style={{ marginRight: "0.5rem" }}>
-          {isSubmitting ? "Saving..." : initialVehicle ? "Save changes" : "Add vehicle"}
+      {submitError && (
+        <p className="mt-3 text-sm" style={{ color: "var(--color-danger)" }}>
+          {submitError}
+        </p>
+      )}
+
+      <div className="mt-5 flex gap-3">
+        <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+          {isSubmitting ? "Saving…" : initialVehicle ? "Save changes" : "Add vehicle"}
         </button>
-        <button type="button" onClick={onCancel}>
+        <button type="button" onClick={onCancel} className="btn btn-secondary">
           Cancel
         </button>
       </div>
     </form>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "0.4rem",
-  display: "block",
-  marginTop: "0.2rem",
-};
