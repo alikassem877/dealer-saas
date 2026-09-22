@@ -6,7 +6,87 @@ datasource db {
   provider = "postgresql"
 }
 
-// ---------- ENUMS ----------
+model Dealership {
+  id                 String             @id @default(cuid())
+  name               String
+  email              String             @unique
+  phone              String?
+  subscriptionStatus SubscriptionStatus @default(TRIAL)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  customers          Customer[]
+  sales              Sale[]
+  users              User[]
+  vehicles           Vehicle[]
+}
+
+model User {
+  id           String      @id @default(cuid())
+  name         String
+  email        String      @unique
+  passwordHash String
+  role         Role        @default(DEALERSHIP_OWNER)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  dealershipId String?
+  dealership   Dealership? @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+}
+
+model Vehicle {
+  id           String        @id @default(cuid())
+  make         String
+  model        String
+  year         Int
+  vin          String        @unique
+  price        Decimal       @db.Decimal(10, 2)
+  mileage      Int           @default(0)
+  color        String?
+  status       VehicleStatus @default(AVAILABLE)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  dealershipId String
+  sale         Sale?
+  dealership   Dealership    @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+  @@index([dealershipId, status])
+}
+
+model Customer {
+  id           String         @id @default(cuid())
+  name         String
+  email        String?
+  phone        String?
+  notes        String?
+  status       CustomerStatus @default(LEAD)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  dealershipId String
+  dealership   Dealership     @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  sales        Sale[]
+
+  @@index([dealershipId])
+}
+
+model Sale {
+  id           String     @id @default(cuid())
+  salePrice    Decimal    @db.Decimal(10, 2)
+  saleDate     DateTime   @default(now())
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  dealershipId String
+  vehicleId    String     @unique
+  customerId   String
+  customer     Customer   @relation(fields: [customerId], references: [id])
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  vehicle      Vehicle    @relation(fields: [vehicleId], references: [id])
+
+  @@index([dealershipId])
+  @@index([dealershipId, saleDate])
+}
 
 enum Role {
   PLATFORM_OWNER
@@ -28,98 +108,4 @@ enum VehicleStatus {
 enum CustomerStatus {
   LEAD
   CUSTOMER
-}
-
-// ---------- MODELS ----------
-
-model Dealership {
-  id                 String             @id @default(cuid())
-  name               String
-  email              String             @unique
-  phone              String?
-  subscriptionStatus SubscriptionStatus @default(TRIAL)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-
-  users     User[]
-  vehicles  Vehicle[]
-  customers Customer[]
-  sales     Sale[]
-}
-
-model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(DEALERSHIP_OWNER)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // Null for PLATFORM_OWNER — they don't belong to any dealership
-  dealershipId String?
-  dealership   Dealership? @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
-
-  @@index([dealershipId])
-}
-
-model Vehicle {
-  id        String        @id @default(cuid())
-  make      String
-  model     String
-  year      Int
-  vin       String        @unique
-  price     Decimal       @db.Decimal(10, 2)
-  mileage   Int           @default(0)
-  color     String?
-  status    VehicleStatus @default(AVAILABLE)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-
-  dealershipId String
-  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
-
-  sale Sale?
-
-  @@index([dealershipId])
-  @@index([dealershipId, status])
-}
-
-model Customer {
-  id        String         @id @default(cuid())
-  name      String
-  email     String?
-  phone     String?
-  notes     String?
-  status    CustomerStatus @default(LEAD)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-
-  dealershipId String
-  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
-
-  sales Sale[]
-
-  @@index([dealershipId])
-}
-
-model Sale {
-  id        String   @id @default(cuid())
-  salePrice Decimal  @db.Decimal(10, 2)
-  saleDate  DateTime @default(now())
-  notes     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  dealershipId String
-  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
-
-  vehicleId String  @unique
-  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
-
-  customerId String
-  customer   Customer @relation(fields: [customerId], references: [id])
-
-  @@index([dealershipId])
-  @@index([dealershipId, saleDate])
 }

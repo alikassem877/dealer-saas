@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const createCustomerSchema = z.object({
-  name: z.string().min(2, "Name is required").max(100),
-  email: z.string().email("Invalid email").optional().or(z.literal("")),
-  phone: z.string().max(30).optional(),
-  notes: z.string().max(1000).optional(),
+  name: z.string().trim().min(2, "Name is required").max(100),
+  email: z.string().trim().toLowerCase().email("Invalid email").optional().or(z.literal("")),
+  phone: z.string().trim().max(30).optional(),
+  notes: z.string().trim().max(1000).optional(),
   status: z.enum(["LEAD", "CUSTOMER"]).default("LEAD"),
 });
 
