@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { createVehicleSchema } from "@/lib/validation/vehicle";
 
 describe("createVehicleSchema", () => {
@@ -21,16 +22,30 @@ describe("createVehicleSchema", () => {
       ...validInput,
       vin: "  1hgcm82633a123456  ",
     });
+
     expect(result.success).toBe(true);
-    if (result.success) expect(result.data.vin).toBe("1HGCM82633A123456");
+
+    if (result.success) {
+      expect(result.data.vin).toBe("1HGCM82633A123456");
+    }
   });
 
   it("rejects a VIN that isn't 17 characters", () => {
-    expect(createVehicleSchema.safeParse({ ...validInput, vin: "TOO_SHORT" }).success).toBe(false);
+    expect(
+      createVehicleSchema.safeParse({
+        ...validInput,
+        vin: "TOO_SHORT",
+      }).success
+    ).toBe(false);
   });
 
   it("rejects a negative price", () => {
-    expect(createVehicleSchema.safeParse({ ...validInput, price: -100 }).success).toBe(false);
+    expect(
+      createVehicleSchema.safeParse({
+        ...validInput,
+        price: -100,
+      }).success
+    ).toBe(false);
   });
 
   it("rejects a year far in the future", () => {
@@ -38,13 +53,21 @@ describe("createVehicleSchema", () => {
       ...validInput,
       year: new Date().getFullYear() + 5,
     });
+
     expect(result.success).toBe(false);
   });
 
   it("defaults mileage to 0 when omitted", () => {
-    const { mileage, ...withoutMileage } = validInput;
+    const withoutMileage = Object.fromEntries(
+      Object.entries(validInput).filter(([key]) => key !== "mileage")
+    );
+
     const result = createVehicleSchema.safeParse(withoutMileage);
+
     expect(result.success).toBe(true);
-    if (result.success) expect(result.data.mileage).toBe(0);
+
+    if (result.success) {
+      expect(result.data.mileage).toBe(0);
+    }
   });
 });

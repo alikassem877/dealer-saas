@@ -53,9 +53,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    refreshUser();
-  }, []);
+  let cancelled = false;
 
+  async function loadUser() {
+    try {
+      const data = await apiFetch<{ user: CurrentUser }>("/api/auth/me");
+
+      if (!cancelled) {
+        setUser(data.user);
+        setIsLoading(false);
+      }
+    } catch {
+      if (!cancelled) {
+        setUser(null);
+        setIsLoading(false);
+      }
+    }
+  }
+
+  loadUser();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
   return (
     <AuthContext.Provider value={{ user, isLoading, refreshUser, logout }}>
       {children}
