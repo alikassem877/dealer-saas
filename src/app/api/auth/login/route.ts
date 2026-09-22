@@ -4,8 +4,22 @@ import { verifyPassword } from "@/lib/auth/password";
 import { signToken } from "@/lib/auth/jwt";
 import { AUTH_COOKIE_NAME } from "@/lib/auth/session";
 import { loginSchema } from "@/lib/validation/auth";
+import { checkRateLimit } from "@/lib/rateLimit";
+
 
 export async function POST(request: Request) {
+  const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+  const rateLimit = checkRateLimit(`login:${ip}`, { limit: 5, windowMs: 60_000 });
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many login attempts. Please try again shortly." },
+      { status: 429, headers: { "Retry-After": String(rateLimit.retryAfterSeconds) } }
+    );
+  }
+
+  // ...rest of the existing function unchanged
+
   const body = await request.json();
 
   const parsed = loginSchema.safeParse(body);

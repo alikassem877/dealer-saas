@@ -4,8 +4,19 @@ import { hashPassword } from "@/lib/auth/password";
 import { signToken } from "@/lib/auth/jwt";
 import { AUTH_COOKIE_NAME } from "@/lib/auth/session";
 import { registerSchema } from "@/lib/validation/auth";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export async function POST(request: Request) {
+  const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+  const rateLimit = checkRateLimit(`register:${ip}`, { limit: 3, windowMs: 60_000 });
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many registration attempts. Please try again shortly." },
+      { status: 429, headers: { "Retry-After": String(rateLimit.retryAfterSeconds) } }
+    );
+  }
+
   const body = await request.json();
 
   const parsed = registerSchema.safeParse(body);

@@ -7,7 +7,10 @@ import { parseOrThrow } from "@/lib/validation/parse";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-async function getOwnedCustomerOrThrow(customerId: string, dealershipId: string) {
+async function getOwnedCustomerOrThrow(
+  customerId: string,
+  dealershipId: string
+) {
   const customer = await prisma.customer.findUnique({
     where: { id: customerId },
   });
@@ -24,14 +27,22 @@ export async function GET(request: Request, { params }: RouteParams) {
     const { dealershipId } = await requireDealershipOwner();
     const { id } = await params;
 
-    const customer = await getOwnedCustomerOrThrow(id, dealershipId);
-
-    // Bonus: include this customer's sales history inline
-    const sales = await prisma.sale.findMany({
-      where: { customerId: id },
-      include: { vehicle: { select: { make: true, model: true, year: true } } },
-      orderBy: { saleDate: "desc" },
-    });
+    const [customer, sales] = await Promise.all([
+      getOwnedCustomerOrThrow(id, dealershipId),
+      prisma.sale.findMany({
+        where: { customerId: id },
+        include: {
+          vehicle: {
+            select: {
+              make: true,
+              model: true,
+              year: true,
+            },
+          },
+        },
+        orderBy: { saleDate: "desc" },
+      }),
+    ]);
 
     return NextResponse.json({ customer, sales });
   } catch (error) {
@@ -70,7 +81,10 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     await getOwnedCustomerOrThrow(id, dealershipId);
 
-    const saleCount = await prisma.sale.count({ where: { customerId: id } });
+    const saleCount = await prisma.sale.count({
+      where: { customerId: id },
+    });
+
     if (saleCount > 0) {
       throw new ApiError(
         400,
@@ -78,7 +92,9 @@ export async function DELETE(request: Request, { params }: RouteParams) {
       );
     }
 
-    await prisma.customer.delete({ where: { id } });
+    await prisma.customer.delete({
+      where: { id },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
