@@ -13,7 +13,8 @@
     "test:server": "dotenv -e .env.test -- next dev -p 3001",
     "test:integration:run": "dotenv -e .env.test -- vitest run src/tests/integration --no-file-parallelism",
     "test:integration": "start-server-and-test test:server http://localhost:3001 test:integration:run",
-    "test": "npm run test:unit && npm run test:integration"
+    "test": "npm run test:unit && npm run test:integration",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
