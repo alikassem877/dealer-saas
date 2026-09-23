@@ -23,8 +23,12 @@ export function RequireAuth({
     }
 
     if (allowedRoles && !allowedRoles.includes(user.role)) {
-      router.push("/login");
-    }
+  router.push(
+    user.role === "PLATFORM_OWNER" ? "/platform/dashboard" : "/dashboard"
+  );
+  return;
+}
+
   }, [user, isLoading, allowedRoles, router]);
 
   if (isLoading || !user) {

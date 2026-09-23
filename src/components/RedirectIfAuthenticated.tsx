@@ -9,10 +9,12 @@ export function RedirectIfAuthenticated({ children }: { children: React.ReactNod
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && user) {
-      router.push("/dashboard");
-    }
-  }, [isLoading, user, router]);
+  if (!isLoading && user) {
+    router.push(
+      user.role === "PLATFORM_OWNER" ? "/platform/dashboard" : "/dashboard"
+    );
+  }
+}, [isLoading, user, router]);
 
   if (isLoading) {
     return <div style={{ padding: "2rem" }}>Loading...</div>;

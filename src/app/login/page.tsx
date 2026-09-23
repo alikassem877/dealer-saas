@@ -22,12 +22,19 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      await apiFetch("/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      await refreshUser(); // fetch the now-logged-in user into context
-      router.push("/dashboard");
+  const result = await apiFetch<{ user: { role: string } }>("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+
+  await refreshUser();
+
+  router.push(
+    result.user.role === "PLATFORM_OWNER"
+      ? "/platform/dashboard"
+      : "/dashboard"
+  );
+
     } catch (err) {
       if (err instanceof ApiClientError) {
         setError(err.message);

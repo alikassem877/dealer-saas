@@ -53,3 +53,12 @@ export type Sale = {
   vehicle: { make: string; model: string; year: number; vin: string };
   customer: { name: string; email: string | null; phone: string | null };
 };
+
+export type PlatformDealership = {
+  id: string;
+  name: string;
+  email: string;
+  subscriptionStatus: "TRIAL" | "ACTIVE" | "EXPIRED";
+  createdAt: string;
+  _count: { vehicles: number; customers: number; sales: number };
+};
