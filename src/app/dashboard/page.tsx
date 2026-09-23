@@ -34,7 +34,7 @@ function DashboardContent() {
         </p>
       )}
       {error && (
-        <p className="mt-8 text-sm" style={{ color: "var(--color-danger)" }}>
+        <p className="feedback-error mt-8" role="alert">
           {error}
         </p>
       )}

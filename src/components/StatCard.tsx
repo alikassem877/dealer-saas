@@ -8,8 +8,8 @@ export function StatCard({
   hint?: string;
 }) {
   return (
-    <div className="card">
-      <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+    <div className="stat-card card">
+      <div className="text-xs font-semibold" style={{ color: "var(--color-text-muted)" }}>
         {label}
       </div>
       <div className="font-display mt-1 text-2xl">{value}</div>

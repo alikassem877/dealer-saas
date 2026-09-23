@@ -85,8 +85,11 @@ function CustomersContent() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl">Customers</h1>
+      <div className="page-header">
+        <div>
+          <h1 className="text-2xl">Customers</h1>
+          <p>Manage your customer relationships and active leads.</p>
+        </div>
         {mode.type === "closed" && (
           <button className="btn btn-primary" onClick={() => setMode({ type: "create" })}>
             Add customer
@@ -123,12 +126,12 @@ function CustomersContent() {
         </p>
       )}
       {error && (
-        <p className="mt-6 text-sm" style={{ color: "var(--color-danger)" }}>
+        <p className="feedback-error mt-6" role="alert">
           {error}
         </p>
       )}
       {rowError && (
-        <p className="mt-6 text-sm" style={{ color: "var(--color-danger)" }}>
+        <p className="feedback-error mt-6" role="alert">
           {rowError}
         </p>
       )}
@@ -138,7 +141,8 @@ function CustomersContent() {
       )}
 
       {data && data.customers.length > 0 && (
-        <table className="data-table mt-6">
+        <div className="table-wrap mt-6">
+        <table className="data-table">
           <thead>
             <tr>
               <th>Name</th>
@@ -175,6 +179,7 @@ function CustomersContent() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

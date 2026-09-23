@@ -58,8 +58,11 @@ function SalesContent() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl">Sales</h1>
+      <div className="page-header">
+        <div>
+          <h1 className="text-2xl">Sales</h1>
+          <p>Review completed deals and record new sales.</p>
+        </div>
         {!isFormOpen && (
           <button className="btn btn-primary" onClick={() => setIsFormOpen(true)}>
             Record sale
@@ -86,7 +89,7 @@ function SalesContent() {
         </p>
       )}
       {loadError && (
-        <p className="mt-6 text-sm" style={{ color: "var(--color-danger)" }}>
+        <p className="feedback-error mt-6" role="alert">
           {loadError}
         </p>
       )}
@@ -96,7 +99,8 @@ function SalesContent() {
       )}
 
       {sales.data && sales.data.sales.length > 0 && (
-        <table className="data-table mt-6">
+        <div className="table-wrap mt-6">
+        <table className="data-table">
           <thead>
             <tr>
               <th>Date</th>
@@ -122,6 +126,7 @@ function SalesContent() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

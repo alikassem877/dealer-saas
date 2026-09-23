@@ -14,8 +14,8 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
-      <div className="text-center">
+    <main className="auth-page flex min-h-screen items-center justify-center px-4">
+      <div className="card max-w-md text-center">
         <h1 className="text-3xl">Something went wrong</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
           Try again, or head back to the dashboard.

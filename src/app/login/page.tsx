@@ -41,8 +41,9 @@ export default function LoginPage() {
 
     return (
     <RedirectIfAuthenticated>
-      <main className="flex min-h-screen items-center justify-center px-4">
-        <div className="card w-full max-w-sm">
+      <main className="auth-page flex min-h-screen items-center justify-center px-4 py-10">
+        <div className="auth-card card w-full max-w-sm">
+          <p className="brand-kicker">Dealer SaaS</p>
           <h1 className="text-2xl">Log in</h1>
           <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
             Welcome back.
@@ -50,8 +51,9 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <div>
-              <label className="field-label">Email</label>
+              <label className="field-label" htmlFor="login-email">Email</label>
               <input
+                id="login-email"
                 className="field-input"
                 type="email"
                 value={email}
@@ -61,8 +63,9 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="field-label">Password</label>
+              <label className="field-label" htmlFor="login-password">Password</label>
               <input
+                id="login-password"
                 className="field-input"
                 type="password"
                 value={password}
@@ -72,7 +75,7 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <p className="text-sm" style={{ color: "var(--color-danger)" }}>
+              <p className="feedback-error" role="alert">
                 {error}
               </p>
             )}

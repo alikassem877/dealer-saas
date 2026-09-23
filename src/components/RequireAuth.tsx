@@ -28,7 +28,11 @@ export function RequireAuth({
   }, [user, isLoading, allowedRoles, router]);
 
   if (isLoading || !user) {
-    return <div style={{ padding: "2rem" }}>Loading...</div>;
+    return (
+      <main className="flex min-h-screen items-center justify-center px-4">
+        <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>Loading your workspace...</p>
+      </main>
+    );
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {

@@ -49,23 +49,24 @@ export function CustomerForm({
     onSubmit(values);
   }
 
-    return (
+  return (
     <form onSubmit={handleSubmit}>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="field-label">Name</label>
-          <input className="field-input" value={values.name} onChange={updateField("name")} required />
+          <label className="field-label" htmlFor="customer-name">Name</label>
+          <input id="customer-name" className="field-input" value={values.name} onChange={updateField("name")} required />
         </div>
         <div>
-          <label className="field-label">Status</label>
-          <select className="field-input" value={values.status} onChange={updateField("status")}>
+          <label className="field-label" htmlFor="customer-status">Status</label>
+          <select id="customer-status" className="field-input" value={values.status} onChange={updateField("status")}>
             <option value="LEAD">Lead</option>
             <option value="CUSTOMER">Customer</option>
           </select>
         </div>
         <div>
-          <label className="field-label">Email</label>
+          <label className="field-label" htmlFor="customer-email">Email</label>
           <input
+            id="customer-email"
             className="field-input"
             type="email"
             value={values.email}
@@ -73,12 +74,13 @@ export function CustomerForm({
           />
         </div>
         <div>
-          <label className="field-label">Phone</label>
-          <input className="field-input" value={values.phone} onChange={updateField("phone")} />
+          <label className="field-label" htmlFor="customer-phone">Phone</label>
+          <input id="customer-phone" className="field-input" value={values.phone} onChange={updateField("phone")} />
         </div>
-        <div className="col-span-2">
-          <label className="field-label">Notes</label>
+        <div className="sm:col-span-2">
+          <label className="field-label" htmlFor="customer-notes">Notes</label>
           <textarea
+            id="customer-notes"
             className="field-input"
             value={values.notes}
             onChange={updateField("notes")}
@@ -88,7 +90,7 @@ export function CustomerForm({
       </div>
 
       {submitError && (
-        <p className="mt-3 text-sm" style={{ color: "var(--color-danger)" }}>
+        <p className="feedback-error mt-4" role="alert">
           {submitError}
         </p>
       )}

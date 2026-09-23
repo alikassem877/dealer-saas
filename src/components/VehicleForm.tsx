@@ -53,20 +53,21 @@ export function VehicleForm({
     onSubmit(values);
   }
 
-    return (
+  return (
     <form onSubmit={handleSubmit}>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="field-label">Make</label>
-          <input className="field-input" value={values.make} onChange={updateField("make")} required />
+          <label className="field-label" htmlFor="vehicle-make">Make</label>
+          <input id="vehicle-make" className="field-input" value={values.make} onChange={updateField("make")} required />
         </div>
         <div>
-          <label className="field-label">Model</label>
-          <input className="field-input" value={values.model} onChange={updateField("model")} required />
+          <label className="field-label" htmlFor="vehicle-model">Model</label>
+          <input id="vehicle-model" className="field-input" value={values.model} onChange={updateField("model")} required />
         </div>
         <div>
-          <label className="field-label">Year</label>
+          <label className="field-label" htmlFor="vehicle-year">Year</label>
           <input
+            id="vehicle-year"
             className="field-input"
             type="number"
             value={values.year}
@@ -75,8 +76,9 @@ export function VehicleForm({
           />
         </div>
         <div>
-          <label className="field-label">VIN</label>
+          <label className="field-label" htmlFor="vehicle-vin">VIN</label>
           <input
+            id="vehicle-vin"
             className="field-input"
             value={values.vin}
             onChange={updateField("vin")}
@@ -85,8 +87,9 @@ export function VehicleForm({
           />
         </div>
         <div>
-          <label className="field-label">Price ($)</label>
+          <label className="field-label" htmlFor="vehicle-price">Price ($)</label>
           <input
+            id="vehicle-price"
             className="field-input"
             type="number"
             step="0.01"
@@ -96,8 +99,9 @@ export function VehicleForm({
           />
         </div>
         <div>
-          <label className="field-label">Mileage</label>
+          <label className="field-label" htmlFor="vehicle-mileage">Mileage</label>
           <input
+            id="vehicle-mileage"
             className="field-input"
             type="number"
             value={values.mileage}
@@ -105,13 +109,13 @@ export function VehicleForm({
           />
         </div>
         <div>
-          <label className="field-label">Color</label>
-          <input className="field-input" value={values.color} onChange={updateField("color")} />
+          <label className="field-label" htmlFor="vehicle-color">Color</label>
+          <input id="vehicle-color" className="field-input" value={values.color} onChange={updateField("color")} />
         </div>
       </div>
 
       {submitError && (
-        <p className="mt-3 text-sm" style={{ color: "var(--color-danger)" }}>
+        <p className="feedback-error mt-4" role="alert">
           {submitError}
         </p>
       )}

@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
-      <div className="text-center">
+    <main className="auth-page flex min-h-screen items-center justify-center px-4">
+      <div className="card max-w-md text-center">
         <h1 className="text-3xl">Page not found</h1>
 
         <p

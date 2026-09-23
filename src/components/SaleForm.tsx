@@ -32,14 +32,6 @@ export function SaleForm({
     notes: "",
   });
 
-  const inputStyle = {
-    width: "100%",
-    padding: "0.5rem",
-    border: "1px solid #ccc",
-    borderRadius: 6,
-    marginTop: "0.25rem",
-  };
-
   function handleVehicleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const vehicleId = e.target.value;
     const vehicle = availableVehicles.find((v) => v.id === vehicleId);
@@ -59,25 +51,16 @@ export function SaleForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "0.75rem",
-        border: "1px solid #ddd",
-        borderRadius: 8,
-        padding: "1rem",
-        marginBottom: "1.5rem",
-      }}
-    >
-      <label>
-        Vehicle
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <label className="field-label" htmlFor="sale-vehicle">Vehicle</label>
         <select
+          id="sale-vehicle"
+          className="field-input"
           value={values.vehicleId}
           onChange={handleVehicleChange}
           required
-          style={inputStyle}
         >
           <option value="" disabled>
             Select an available vehicle
@@ -90,11 +73,13 @@ export function SaleForm({
             </option>
           ))}
         </select>
-      </label>
+      </div>
 
-      <label>
-        Customer
+      <div>
+        <label className="field-label" htmlFor="sale-customer">Customer</label>
         <select
+          id="sale-customer"
+          className="field-input"
           value={values.customerId}
           onChange={(e) =>
             setValues((prev) => ({
@@ -103,7 +88,6 @@ export function SaleForm({
             }))
           }
           required
-          style={inputStyle}
         >
           <option value="" disabled>
             Select a customer
@@ -115,11 +99,13 @@ export function SaleForm({
             </option>
           ))}
         </select>
-      </label>
+      </div>
 
-      <label>
-        Sale price ($)
+      <div>
+        <label className="field-label" htmlFor="sale-price">Sale price ($)</label>
         <input
+          id="sale-price"
+          className="field-input"
           type="number"
           step="0.01"
           value={values.salePrice}
@@ -130,13 +116,14 @@ export function SaleForm({
             }))
           }
           required
-          style={inputStyle}
         />
-      </label>
+      </div>
 
-      <label>
-        Notes
+      <div>
+        <label className="field-label" htmlFor="sale-notes">Notes</label>
         <input
+          id="sale-notes"
+          className="field-input"
           value={values.notes}
           onChange={(e) =>
             setValues((prev) => ({
@@ -144,17 +131,17 @@ export function SaleForm({
               notes: e.target.value,
             }))
           }
-          style={inputStyle}
         />
-      </label>
+      </div>
+      </div>
 
-      <div style={{ gridColumn: "1 / -1" }}>
+      <div className="mt-5">
         {submitError && (
-          <p style={{ color: "crimson" }}>{submitError}</p>
+          <p className="feedback-error mb-3" role="alert">{submitError}</p>
         )}
 
         {availableVehicles.length === 0 && (
-          <p style={{ color: "#856404" }}>
+          <p className="feedback-warning mb-3">
             No available vehicles to sell. Add inventory first.
           </p>
         )}
@@ -162,12 +149,12 @@ export function SaleForm({
         <button
           type="submit"
           disabled={isSubmitting || availableVehicles.length === 0}
-          style={{ marginRight: "0.5rem" }}
+          className="btn btn-primary mr-2"
         >
           {isSubmitting ? "Recording sale..." : "Record sale"}
         </button>
 
-        <button type="button" onClick={onCancel}>
+        <button type="button" onClick={onCancel} className="btn btn-secondary">
           Cancel
         </button>
       </div>

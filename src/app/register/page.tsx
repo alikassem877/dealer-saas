@@ -47,8 +47,9 @@ export default function RegisterPage() {
 
    return (
     <RedirectIfAuthenticated>
-      <main className="flex min-h-screen items-center justify-center px-4 py-10">
-        <div className="card w-full max-w-sm">
+      <main className="auth-page flex min-h-screen items-center justify-center px-4 py-10">
+        <div className="auth-card card w-full max-w-sm">
+          <p className="brand-kicker">Dealer SaaS</p>
           <h1 className="text-2xl">Register your dealership</h1>
           <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
             Set up your account in a minute.
@@ -56,8 +57,9 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <div>
-              <label className="field-label">Dealership name</label>
+              <label className="field-label" htmlFor="register-dealership-name">Dealership name</label>
               <input
+                id="register-dealership-name"
                 className="field-input"
                 value={form.dealershipName}
                 onChange={updateField("dealershipName")}
@@ -65,8 +67,9 @@ export default function RegisterPage() {
               />
             </div>
             <div>
-              <label className="field-label">Dealership email</label>
+              <label className="field-label" htmlFor="register-dealership-email">Dealership email</label>
               <input
+                id="register-dealership-email"
                 className="field-input"
                 type="email"
                 value={form.dealershipEmail}
@@ -75,8 +78,9 @@ export default function RegisterPage() {
               />
             </div>
             <div>
-              <label className="field-label">Your name</label>
+              <label className="field-label" htmlFor="register-owner-name">Your name</label>
               <input
+                id="register-owner-name"
                 className="field-input"
                 value={form.ownerName}
                 onChange={updateField("ownerName")}
@@ -84,8 +88,9 @@ export default function RegisterPage() {
               />
             </div>
             <div>
-              <label className="field-label">Your email</label>
+              <label className="field-label" htmlFor="register-owner-email">Your email</label>
               <input
+                id="register-owner-email"
                 className="field-input"
                 type="email"
                 value={form.ownerEmail}
@@ -94,8 +99,9 @@ export default function RegisterPage() {
               />
             </div>
             <div>
-              <label className="field-label">Password</label>
+              <label className="field-label" htmlFor="register-password">Password</label>
               <input
+                id="register-password"
                 className="field-input"
                 type="password"
                 value={form.password}
@@ -106,7 +112,7 @@ export default function RegisterPage() {
             </div>
 
             {error && (
-              <p className="text-sm" style={{ color: "var(--color-danger)" }}>
+              <p className="feedback-error" role="alert">
                 {error}
               </p>
             )}
