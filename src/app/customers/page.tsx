@@ -141,8 +141,8 @@ function CustomersContent() {
       )}
 
       {data && data.customers.length > 0 && (
-        <div className="table-wrap mt-6">
-        <table className="data-table">
+        <div className="mt-6 overflow-x-auto">
+         <table className="data-table">
           <thead>
             <tr>
               <th>Name</th>
