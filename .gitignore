@@ -42,3 +42,12 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+# local cookie/session files
+cookies*.txt
+
+# Windows folder metadata
+desktop.ini
+
+# Keep safe environment templates in Git
+!.env.example
+!.env.test.example
