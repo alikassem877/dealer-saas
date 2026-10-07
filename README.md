@@ -79,7 +79,7 @@ dealer-saas/
 │       ├── unit/
 │       └── integration/
 │
-├── prisma/
+├
 ├── docker-compose.yml
 └── package.json
 ```
